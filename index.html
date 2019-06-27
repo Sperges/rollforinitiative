@@ -15,7 +15,7 @@
     }
     .grid-container {
       display: grid;
-      grid-template-columns: 10% 40% 20% 10% 10% 10%;
+      grid-template-columns: 10% 35% 25% 10% 10% 10%;
     }
     .grid-item {
       background-color: rgba(255, 255, 255, 0.8);
@@ -147,7 +147,7 @@
         actionsList = []
         for (let i = 0; i < masterList.length; i++) {
           const obj = masterList[i];
-          obj.actionsInit = Math.floor(Math.random() * 21) + obj.dexMod;
+          obj.actionsInit = Math.floor(Math.random() * 20) + 1 + obj.dexMod;
           actionsList.push({
             index: i,
             value: obj.actionsInit
