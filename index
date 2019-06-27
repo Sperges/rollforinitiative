@@ -1,0 +1,212 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>
+      Turn Order
+    </title>
+  </head>
+
+  <style>
+    .command-container {
+      display: grid;
+      grid-template-columns: 33% 33% 34%;
+      background-color: black;
+      font-size: 30px;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: 10% 40% 20% 10% 10% 10%;
+    }
+    .grid-item {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      font-size: 40px;
+      text-align: center;
+    }
+    .grid-button {
+      background-color: white;
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      font-size: 40px;
+      text-align: center;
+    }
+    .grid-button:active {
+      background-color: grey;
+    }
+  </style>
+
+  <body bgcolor="#ffffff" text="#000000" link="#ff0000" vlink="#880000" alink="#00ff00">
+    <div class="command-container">
+        <div class="grid-button" onclick="AddCharacter()">Add</div>
+      <div class="grid-button" onclick="NewPlanning()">Plan</div>
+      <div class="grid-button" onclick="NewActions()">Act</div>
+    </div>
+    <h1>Planning</h1>
+    <div id="Planning"></div>
+    <h1>Actions</h1>
+    <div id="Actions"></div>
+    <script>
+      const masterList = [];
+      var actionsList = [];
+      var planningList = [];
+      const planningDiv = document.getElementById('Planning');
+      const actionsDiv = document.getElementById('Actions');
+      function AddCharacter() {
+        const name = prompt("Enter Name.", "Name");
+        const intMod = parseInt(prompt("Enter Int Mod", "0"));
+        const dexMod = parseInt(prompt("Enter Dex Mod", "0"));
+        const newCharacter = {
+          name: name,
+          intMod: intMod,
+          dexMod: dexMod,
+          planningInit: 0,
+          actionsInit: 0
+        };
+        masterList.push(newCharacter);
+        actionsList.push({
+          index: masterList.length-1,
+          value: newCharacter.actionsInit
+        });
+        planningList.push({
+          index: masterList.length-1,
+          value: newCharacter.planningInit
+        });
+        Render();
+      }
+      function RemoveCharacter(index) {
+        let ai = null;
+        let pi = null;
+        for (let i = 0; i < actionsList.length; i++) {
+          if (actionsList[i].index == index) {
+            ai = i;
+          }
+        }
+        for (let i = 0; i < planningList.length; i++) {
+          if (planningList[i].index == index) {
+            pi = i;
+          }
+        }
+        actionsList.splice(ai, 1);
+        planningList.splice(pi, 1);
+        masterList.splice(index, 1);
+        for (let i = 0; i < actionsList.length; i++) {
+          if (actionsList[i].index >= index) {
+            actionsList[i].index--;
+          }
+        }
+        for (let i = 0; i < planningList.length; i++) {
+          if (planningList[i].index >= index) {
+            planningList[i].index--;
+          }
+        }
+        Render();
+      }
+      function SetName(index) {
+        const newName = prompt("Enter Name.", masterList[index].name);
+        masterList[index].name = newName;
+        Render();
+      }
+      function SetIntMod(index) {
+        const newMod = parseInt(prompt("Enter Int Mod", "0"));
+        masterList[index].intMod = newMod;
+        Render()
+      }
+      function SetDexMod(index) {
+        const newMod = parseInt(prompt("Enter Dex Mod", "0"));
+        masterList[index].dexMod = newMod;
+        Render()
+      }
+      function MovePlanning(index, dir) {
+        if (masterList.length < 2)
+          return
+        const masterRef = planningList[index];
+        if (dir == 1) {
+          planningList.splice(index, 1);
+          planningList.splice(index-1, 0, masterRef);
+        } else {
+          planningList.splice(index, 1);
+          planningList.splice(index+1, 0, masterRef);
+        }
+        Render();
+      }
+      function MoveActions(index, dir) {
+        if (masterList.length < 2)
+          return
+        const masterRef = actionsList[index];
+        if (dir == 1) {
+          actionsList.splice(index, 1);
+          actionsList.splice(index-1, 0, masterRef);
+        } else {
+          actionsList.splice(index, 1);
+          actionsList.splice(index+1, 0, masterRef);
+        }
+        Render();
+      }
+      function NewActions() {
+        actionsList = []
+        for (let i = 0; i < masterList.length; i++) {
+          const obj = masterList[i];
+          obj.actionsInit = Math.floor(Math.random() * 21) + obj.dexMod;
+          actionsList.push({
+            index: i,
+            value: obj.actionsInit
+          })
+        }
+        actionsList.sort(function(a, b) {
+          return b.value - a.value;
+        })
+        Render()
+      }
+      function NewPlanning() {
+        planningList = []
+        for (let i = 0; i < masterList.length; i++) {
+          const obj = masterList[i];
+          obj.planningInit = Math.floor(Math.random() * 21) + obj.dexMod;
+          planningList.push({
+            index: i,
+            value: obj.planningInit
+          })
+        }
+        planningList.sort(function(a, b) {
+          return a.value - b.value;
+        })
+        Render()
+      }
+      function Render() {
+        RenderActions();
+        RenderPlanning();
+      }
+      function RenderPlanning() {
+        planningDiv.innerHTML = '';
+        for (let i = 0; i < planningList.length; i++) {
+          const obj = masterList[planningList[i].index];
+          planningDiv.innerHTML += 
+            '<div class="grid-container">\
+              <div class="grid-item">'+planningList[i].value+'</div>\
+              <div class="grid-button" onclick="SetName('+planningList[i].index+')">'+obj.name+'</div>\
+              <div class="grid-button" onclick="SetIntMod('+planningList[i].index+')">Int: '+obj.intMod+'</div>\
+              <div class="grid-button" onclick="MovePlanning('+i+', 1)">^</div>\
+              <div class="grid-button" onclick="MovePlanning('+i+', 0)">v</div>\
+              <div class="grid-button" onclick="RemoveCharacter('+planningList[i].index+')">X</div>\
+            </div>';
+        }
+      }
+      function RenderActions() {
+        actionsDiv.innerHTML = '';
+        for (let i = 0; i < actionsList.length; i++) {
+          const obj = masterList[actionsList[i].index];
+          actionsDiv.innerHTML += 
+            '<div class="grid-container">\
+                <div class="grid-item">'+actionsList[i].value+'</div>\
+              <div class="grid-button" onclick="SetName('+actionsList[i].index+')">'+obj.name+'</div>\
+              <div class="grid-button" onclick="SetDexMod('+actionsList[i].index+')">Dex: '+obj.dexMod+'</div>\
+              <div class="grid-button" onclick="MoveActions('+i+', 1)">^</div>\
+              <div class="grid-button" onclick="MoveActions('+i+', 0)">v</div>\
+              <div class="grid-button" onclick="RemoveCharacter('+actionsList[i].index+')">X</div>\
+            </div>';
+        }
+      }
+    </script>
+  </body>
+</html>
