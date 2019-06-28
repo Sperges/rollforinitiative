@@ -147,7 +147,7 @@
         actionsList = []
         for (let i = 0; i < masterList.length; i++) {
           const obj = masterList[i];
-          obj.actionsInit = Math.floor(Math.random() * 20) + 1 + obj.intMod;
+          obj.actionsInit = Math.floor(Math.random() * 20) + 1 + obj.dexMod;
           actionsList.push({
             index: i,
             value: obj.actionsInit
@@ -162,7 +162,7 @@
         planningList = []
         for (let i = 0; i < masterList.length; i++) {
           const obj = masterList[i];
-          obj.planningInit = Math.floor(Math.random() * 21) + obj.dexMod;
+          obj.planningInit = Math.floor(Math.random() * 21) + obj.intMod;
           planningList.push({
             index: i,
             value: obj.planningInit
