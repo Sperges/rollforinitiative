@@ -2,7 +2,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>
-      Turn Order
+      Initiative Tracker
     </title>
   </head>
 
@@ -147,7 +147,7 @@
         actionsList = []
         for (let i = 0; i < masterList.length; i++) {
           const obj = masterList[i];
-          obj.actionsInit = Math.floor(Math.random() * 20) + 1 + obj.dexMod;
+          obj.actionsInit = Math.floor(Math.random() * 20) + 1 + obj.intMod;
           actionsList.push({
             index: i,
             value: obj.actionsInit
