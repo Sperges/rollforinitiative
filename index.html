@@ -52,10 +52,7 @@
       var planningList = [];
       const planningDiv = document.getElementById('Planning');
       const actionsDiv = document.getElementById('Actions');
-      function AddCharacter() {
-        const name = prompt("Enter Name.", "Name");
-        const intMod = parseInt(prompt("Enter Int Mod", "0"));
-        const dexMod = parseInt(prompt("Enter Dex Mod", "0"));
+      function AddCharacterHelper(name, intMod, dexMod) {
         const newCharacter = {
           name: name,
           intMod: intMod,
@@ -73,6 +70,12 @@
           value: newCharacter.planningInit
         });
         Render();
+      }
+      function AddCharacter() {
+        const name = prompt("Enter Name.", "Name");
+        const intMod = parseInt(prompt("Enter Int Mod", "0"));
+        const dexMod = parseInt(prompt("Enter Dex Mod", "0"));
+        AddCharacterHelper(name, intMod, dexMod)
       }
       function RemoveCharacter(index) {
         let ai = null;
@@ -207,6 +210,15 @@
             </div>';
         }
       }
+      AddCharacterHelper("Johann", 0, 0)
+      AddCharacterHelper("Raynor", 2, 2)
+      AddCharacterHelper("Koryn", -1, 2)
+      AddCharacterHelper("William", 0, 1)
+      AddCharacterHelper("Arryn", 3, 1)
+      AddCharacterHelper("Clint", 2, 0)
+      AddCharacterHelper("Tyler", 2, -1)
+      AddCharacterHelper("Dilynwr", 1, -4)
+      AddCharacterHelper("Eldur", 1, -4)
     </script>
   </body>
 </html>
